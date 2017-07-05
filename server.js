@@ -2,14 +2,16 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const {spellCheck, getKoreanWord} = require('./utils');
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3003;
 
 var app = express();
 app.use(bodyParser.json());
 
 app.get('/keyboard', (req, res) => {
     menu = {
-        'message': '안녕하세요, 맞춤벗입니다. 문장을 입력해주시면 교정된 문장이 나옵니다.'
+        'message': {
+            'text':'안녕하세요, 맞춤벗입니다. 문장을 입력해주시면 교정된 문장이 나옵니다.\n단어 뒤에 \'뜻\'을 입력하시면 단어 뜻도 나옵니다.'
+        }
     }
 
     res.send(menu);
@@ -31,7 +33,9 @@ app.post('/message', (req, res) => {
     if (message.match(/ 뜻$/)) {
         getKoreanWord(message, (result) => {
             sendData = {
-                'message': result
+                'message': {
+                   'text': result
+                }
             };
             res.send(sendData);
         })
@@ -40,8 +44,10 @@ app.post('/message', (req, res) => {
     else {
         spellCheck(message, (result) => {
         sendData = {
-            'message': result
-        };
+                'message': {
+                   'text': result
+                }
+            };
 
         res.send(sendData);
         return;
