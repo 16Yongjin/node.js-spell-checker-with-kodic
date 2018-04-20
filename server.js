@@ -1,62 +1,27 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const {spellCheck, getKoreanWord} = require('./utils');
+const express = require('express')
+const bodyParser = require('body-parser')
+const { spellCheck, getKoreanWord } = require('./app')
 
-const port = process.env.PORT || 3003;
+const port = process.env.PORT || 3003
 
-var app = express();
-app.use(bodyParser.json());
+var app = express()
+app.use(bodyParser.json())
 
 app.get('/keyboard', (req, res) => {
-    menu = {
-        'message': {
-            'text':'안녕하세요, 맞춤벗입니다. 문장을 입력해주시면 교정된 문장이 나옵니다.\n단어 뒤에 \'뜻\'을 입력하시면 단어 뜻도 나옵니다.'
-        }
-    }
+	res.send({ type: 'text'	})
+})
 
-    res.send(menu);
-});
-
-app.post('/message', (req, res) => {
-    var sendData = {};
-
-    if (!req.body['user_key'] || !req.body['type'] || !req.body['content']) {
-        sendData['success'] = 0;
-        sendData['error'] = 'invalid request';
-        res.send(JSON.stringify(sendData));
-        
- 
-    }
-
-    var message = req.body['content'];
-
-    if (message.match(/ 뜻$/)) {
-        getKoreanWord(message, (result) => {
-            sendData = {
-                'message': {
-                   'text': result
-                }
-            };
-            res.send(sendData);
-        })
-        return;
-    }
-    else {
-        spellCheck(message, (result) => {
-        sendData = {
-                'message': {
-                   'text': result
-                }
-            };
-
-        res.send(sendData);
-        return;
-        });
-    }
-
-    
-});
+app.post('/message', async (req, res) => {
+	const { content } = req.body
+	try {
+		const text = content.match(/ 뜻$/) ? await getKoreanWord(content) : await spellCheck(content)
+		res.send({ message: { text } })
+	} catch (e) {
+		console.log(e)
+		res.send({ error: '서버 내부 에러' })
+	}
+})
 
 app.listen(port, () => {
-    console.log(`Server is up on port ${port}`);
-});
+	console.log(`Server is up on port ${port}`)
+})
