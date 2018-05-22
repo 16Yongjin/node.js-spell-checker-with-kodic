@@ -1,8 +1,10 @@
 var rp = require('request-promise')
 const headers = {
 	'user-agent':
-		'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36'
+		'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36',
+		referer: 'https://search.naver.com/search.naver?where=nexearch&ie=utf8&sm=tab_she&qdt=0'
 }
+
 const getSpellUrl = query =>
 	`https://m.search.naver.com/p/csearch/ocontent/spellchecker.nhn?_callback=window.__jindo2_callback._spellingCheck_0&q=${encodeURIComponent(
 		query
@@ -11,6 +13,7 @@ const getSpellUrl = query =>
 const spellCheck = async query => {
 	try {
 		const uri = getSpellUrl(query)
+
 		const body = await rp({ uri, headers })
 		const jsonStr = body.replace(/.+\((.+)\);/, '$1')
 		const parsed = JSON.parse(jsonStr).message.result

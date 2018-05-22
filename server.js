@@ -7,9 +7,7 @@ const port = process.env.PORT || 3003
 var app = express()
 app.use(bodyParser.json())
 
-app.get('/keyboard', (req, res) => {
-	res.send({ type: 'text'	})
-})
+app.get('/keyboard', (req, res) => { res.send({ type: 'text' }) })
 
 app.post('/message', async (req, res) => {
 	const { content } = req.body
@@ -22,6 +20,4 @@ app.post('/message', async (req, res) => {
 	}
 })
 
-app.listen(port, () => {
-	console.log(`Server is up on port ${port}`)
-})
+app.listen(port, () => console.log(`Server is up on port ${port}`) )
