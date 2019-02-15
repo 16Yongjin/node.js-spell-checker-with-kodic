@@ -11,7 +11,7 @@ app.get('/keyboard', (req, res) => { res.send({ type: 'text' }) })
 
 app.post('/message', async (req, res) => {
 	const { content } = req.body
-	console.log(req.body, req)
+	console.log(req.body, content)
 	try {
 		const text = content.match(/ 뜻$/) ? await getKoreanWord(content) : await spellCheck(content)
 		res.send({ message: { text } })
