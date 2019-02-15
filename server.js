@@ -15,8 +15,8 @@ app.post('/message', async (req, res) => {
 		const text = content.match(/ 뜻$/) ? await getKoreanWord(content) : await spellCheck(content)
 		res.send({ message: { text } })
 	} catch (e) {
-		console.log(e)
-		res.send({ error: '서버 내부 에러' })
+		console.log(error)
+		res.send({ error })
 	}
 })
 

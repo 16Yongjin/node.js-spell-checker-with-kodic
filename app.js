@@ -26,7 +26,7 @@ const spellCheck = async query => {
 	}
 }
 
-// spellCheck('안녕하새요').then(console.log)
+spellCheck('안녕하새요').then(console.log)
 
 const getDictUrl = query =>
 	`http://suggest-bar.daum.net/suggest?mod=json&code=utf_in_out&enc=utf&id=language&cate=kor&q=${encodeURIComponent(query)}&callback=window.suggestInstance.dataModel.forceLoadComplete`
