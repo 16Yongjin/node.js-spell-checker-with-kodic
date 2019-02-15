@@ -5,14 +5,17 @@ const { spellCheck, getKoreanWord } = require('./app')
 const port = process.env.PORT || 3003
 
 var app = express()
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
+// app.use(bodyParser.urlencoded({ extended: false }))
+// app.use(bodyParser.json())
+app.use(bodyParser.raw())
 
 app.get('/keyboard', (req, res) => { res.send({ type: 'text' }) })
 
 app.post('/message', async (req, res) => {
 	const { content } = req.body
-	console.log(req.body, content)
+
+	console.log(req.body.toString())
+	
 	try {
 		const text = content.match(/ 뜻$/) ? await getKoreanWord(content) : await spellCheck(content)
 		res.send({ message: { text } })
