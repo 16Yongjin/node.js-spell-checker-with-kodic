@@ -5,7 +5,8 @@ const { spellCheck, getKoreanWord } = require('./app')
 const port = process.env.PORT || 3003
 
 var app = express()
-app.use(bodyParser)
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 
 app.get('/keyboard', (req, res) => { res.send({ type: 'text' }) })
 
